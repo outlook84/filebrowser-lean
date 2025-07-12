@@ -23,7 +23,7 @@ COPY ./content ./
 WORKDIR /config
 
 # Create the default data directory
-RUN mkdir -p /srv 
+RUN mkdir -p /srv
 
 VOLUME /srv /config
 
