@@ -117,7 +117,8 @@ jobs:
       - name: Replace VERSION_ENV and SHA_ENV in Dockerfile
         if: steps.cache-check.outputs.cache-hit != 'true'
         run: |
-          sed -i "s/VERSION_ENV/${{ steps.get_tag.outputs.tag }}/g" Dockerfile
+          TAG_WITHOUT_V=$(echo "${{ steps.get_tag.outputs.tag }}" | sed 's/^v//')
+          sed -i "s/VERSION_ENV/${TAG_WITHOUT_V}/g" Dockerfile
           sed -i "s/SHA_ENV/${{ steps.get_upstream_sha.outputs.upstream_sha }}/g" Dockerfile
 
       - name: Build and push Docker image
@@ -126,7 +127,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./
-          platforms: ${{ github.event_name == 'workflow_dispatch' && 'linux/amd64' || 'linux/amd64,linux/arm64,linux/arm/v7' }}
+          platforms: "linux/amd64,linux/arm64,linux/arm/v7"
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
