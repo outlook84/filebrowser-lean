@@ -7,4 +7,4 @@ if [ ! -f "/config/settings.json" ]; then
   cp -a /settings.json /config/settings.json
 fi
 
-exec filebrowser
+exec filebrowser "$@"
