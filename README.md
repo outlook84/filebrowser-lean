@@ -9,7 +9,7 @@ A lightweight and streamlined Docker image for [FileBrowser](https://filebrowser
 
 ## Comparison with Official `filebrowser/filebrowser` Docker Image
 
-| Feature             | `filebrowser-lean` (This Project)                               | Official `filebrowser/filebrowser` Image                               |
+| Feature             | `filebrowser-lean`                              | Official `filebrowser/filebrowser` Image                               |
 | :------------------ | :-------------------------------------------------------------- | :----------------------------------------------------------------------- |
 | **Base Image**      | `busybox:musl` (final stage)                                   | `alpine`                         |
 | **Image Size**      | less than 20MB               | 50-60MB+           |
@@ -19,7 +19,7 @@ A lightweight and streamlined Docker image for [FileBrowser](https://filebrowser
 
 Deployment is similar to filebrowser v2.33.0+. There is two differences:
 - You don't have to change the permission of two mounted dirs. No more uid/gid mapping issues in rootless environment.
-- You directly pass --config arg to container without overiding the whole entrypoint.
+- You can directly pass --config arg to container without overiding the whole entrypoint.
 
 ```bash
 docker run -d \
