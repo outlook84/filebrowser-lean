@@ -13,11 +13,18 @@ COPY ./filebrowser .
 # CGO_ENABLED=0 creates a static binary.
 RUN CGO_ENABLED=0 go build -v -o /filebrowser -ldflags="-w -s -X github.com/filebrowser/filebrowser/v2/version.Version=VERSION_ENV -X github.com/filebrowser/filebrowser/v2/version.CommitSHA=SHA_ENV" .
 
+RUN apk add --no-cache mailcap
+
 # Stage 2: Create the final, minimal image
 FROM busybox:musl
 
 # Copy the static binary from the builder stage
 COPY --from=builder /filebrowser /usr/local/bin/filebrowser
+
+# Copy mailcap
+COPY --from=builder /etc/mime.types /etc/mime.types
+
+# Copy entrypoint script and config file
 COPY ./content ./
 
 WORKDIR /config

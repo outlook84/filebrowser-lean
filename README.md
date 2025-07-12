@@ -15,6 +15,8 @@ A lightweight and streamlined Docker image for [FileBrowser](https://filebrowser
 | **Image Size**      | less than 20MB               | 50-60MB+           |
 | **Configuration**   | No hard-coded user and healthcheck,<br>support passing --config arg for custom location  | Hard coded user, healthcheck and config file location           |
 
+**This image doesn't have ca-certificates, so you need to a reverse proxy like nginx/caddy for tls support.**
+
 ## Usage
 
 Deployment is similar to filebrowser v2.33.0+. There is two differences:
