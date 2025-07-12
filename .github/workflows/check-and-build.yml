@@ -86,6 +86,7 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "./filebrowser/frontend/pnpm-lock.yaml"
       - name: Build frontend
+        if: steps.cache-check.outputs.cache-hit != 'true'
         run: make build-frontend
         working-directory: "./filebrowser"
 
