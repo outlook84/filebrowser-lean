@@ -1,7 +1,5 @@
 # Stage 1: Build the application from source
-ARG GO_VERSION=1.22
-ARG VERSION=unknown
-ARG COMMIT_SHA=unknown
+ARG GO_VERSION=1.23.0
 FROM golang:${GO_VERSION}-alpine AS builder
 
 # Set the working directory
@@ -12,8 +10,8 @@ COPY ./filebrowser .
 
 # Build the filebrowser binary statically
 # -ldflags="-w -s" strips debug information to reduce binary size.
-# CGO_ENABLED=0 creates a static binary, which is ideal for Alpine.
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -v -o /filebrowser -ldflags="-w -s -X github.com/filebrowser/filebrowser/v2/version.Version=${VERSION} -X github.com/filebrowser/filebrowser/v2/version.CommitSHA=${COMMIT_SHA}" .
+# CGO_ENABLED=0 creates a static binary.
+RUN CGO_ENABLED=0 go build -v -o /filebrowser -ldflags="-w -s -X github.com/filebrowser/filebrowser/v2/version.Version=VERSION_ENV -X github.com/filebrowser/filebrowser/v2/version.CommitSHA=SHA_ENV" .
 
 # Stage 2: Create the final, minimal image
 FROM busybox:musl

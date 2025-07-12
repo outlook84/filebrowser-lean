@@ -75,6 +75,20 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: pnpm/action-setup@v4
+        if: steps.cache-check.outputs.cache-hit != 'true'
+        with:
+          package_json_file: "./filebrowser/frontend/package.json"
+      - uses: actions/setup-node@v4
+        if: steps.cache-check.outputs.cache-hit != 'true'
+        with:
+          node-version: "22.x"
+          cache: "pnpm"
+          cache-dependency-path: "./filebrowser/frontend/pnpm-lock.yaml"
+      - name: Build frontend
+        run: make build-frontend
+        working-directory: "./filebrowser"
+
       - name: Set up QEMU
         if: steps.cache-check.outputs.cache-hit != 'true'
         uses: docker/setup-qemu-action@v3
@@ -99,6 +113,12 @@ jobs:
             type=sha
             latest
 
+      - name: Replace VERSION_ENV and SHA_ENV in Dockerfile
+        if: steps.cache-check.outputs.cache-hit != 'true'
+        run: |
+          sed -i "s/VERSION_ENV/${{ steps.get_tag.outputs.tag }}/g" Dockerfile
+          sed -i "s/SHA_ENV/${{ steps.get_upstream_sha.outputs.upstream_sha }}/g" Dockerfile
+
       - name: Build and push Docker image
         id: build-and-push
         if: steps.cache-check.outputs.cache-hit != 'true'
@@ -109,10 +129,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            VERSION=${{ steps.get_tag.outputs.tag }}
-            GO_VERSION=${{ steps.get_go_version.outputs.go_version }}
-            COMMIT_SHA=${{ steps.get_upstream_sha.outputs.upstream_sha }}
+          build-args: |                                                                                                                          │
+            GO_VERSION=${{ steps.get_go_version.outputs.go_version }}    
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
