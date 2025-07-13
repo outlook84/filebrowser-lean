@@ -2,18 +2,10 @@
 
 A lightweight and streamlined Docker image for [FileBrowser](https://filebrowser.org/), designed for minimal footprint and simplified deployment. This project builds the FileBrowser binary from source and packages it into a tiny busybox-based image.
 
-## Why "Lean"?
-
 *   **Minimal Image Size** 
-*   **Simplified Configuration** 
-
-## Comparison with Official `filebrowser/filebrowser` Docker Image
-
-| Feature             | `filebrowser-lean`                              | Official `filebrowser/filebrowser` Image                               |
-| :------------------ | :-------------------------------------------------------------- | :----------------------------------------------------------------------- |
-| **Base Image**      | `busybox:musl` (final stage)                                   | `alpine`                         |
-| **Image Size**      | less than 20MB               | 50-60MB+           |
-| **Configuration**   | No hard-coded user and healthcheck,<br>support passing --config arg for custom location  | Hard coded user, healthcheck and config file location           |
+*   **Simplified Configuration:**
+  
+     No pre-defined user and healthcheck,support passing --config arg for custom config file location.
 
 **This image doesn't have ca-certificates, so you need to a reverse proxy like nginx/caddy for tls support.**
 
