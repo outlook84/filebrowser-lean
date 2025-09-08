@@ -79,7 +79,7 @@ jobs:
         if: steps.cache-check.outputs.cache-hit != 'true'
         with:
           package_json_file: "./filebrowser/frontend/package.json"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         if: steps.cache-check.outputs.cache-hit != 'true'
         with:
           node-version: "22.x"
