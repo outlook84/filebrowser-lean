@@ -82,13 +82,15 @@ jobs:
       - uses: actions/setup-node@v4
         if: steps.cache-check.outputs.cache-hit != 'true'
         with:
-          node-version: "22.x"
+          node-version: "24.x"
           cache: "pnpm"
           cache-dependency-path: "./filebrowser/frontend/pnpm-lock.yaml"
       - name: Build frontend
         if: steps.cache-check.outputs.cache-hit != 'true'
-        run: make build-frontend
-        working-directory: "./filebrowser"
+        working-directory: "./filebrowser/frontend"
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build
 
       - name: Set up QEMU
         if: steps.cache-check.outputs.cache-hit != 'true'
